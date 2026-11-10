@@ -164,6 +164,11 @@ h2 {
   -webkit-user-select: none;
 }
 
+.duo--solo {
+  grid-template-rows: auto minmax(0, 1fr);
+  padding-top: max(8px, env(safe-area-inset-top));
+}
+
 .side {
   position: relative;
   display: grid;

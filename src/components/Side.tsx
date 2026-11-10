@@ -39,14 +39,17 @@ export function Side({
   wobble: Wobble | null;
   busy: boolean;
   retrying: boolean;
-  result: { length: number; newRecord: boolean } | null;
+  result: { text: string; newRecord: boolean } | null;
   onPress: (pad: number) => void;
   onReplay: () => void;
   onPlayAgain: () => void;
   t: Strings;
 }) {
+  const solo = song.players === 1;
   const mine = song.turn === player && !song.over;
-  const active = mine && !busy;
+  // Alone, the game's turn is while it adds a note and plays the song.
+  const gameTurn = solo && (isAdding(song) || (busy && !retrying));
+  const active = mine && !busy && !gameTurn;
   const pads = PADS[song.pads];
 
   const prompt = !mine
@@ -55,11 +58,13 @@ export function Side({
       : t.listen
     : retrying && song.step === 0
       ? t.tryAgain
-      : !song.notes.length
-        ? t.first
-        : isAdding(song)
-          ? t.add
-          : t.repeat;
+      : gameTurn
+        ? t.listen
+        : !song.notes.length
+          ? t.first
+          : isAdding(song)
+            ? t.add
+            : t.repeat;
 
   // Taps react on touch down, without the click delay; a click with no
   // pointer behind it is the keyboard.
@@ -71,7 +76,11 @@ export function Side({
 
   return (
     <section
-      className={['side', player === 1 && 'side--top', mine && 'side--turn']
+      className={[
+        'side',
+        player === 1 && 'side--top',
+        mine && !gameTurn && 'side--turn',
+      ]
         .filter(Boolean)
         .join(' ')}
     >
@@ -88,11 +97,13 @@ export function Side({
                   className={i < song.step ? 'dot dot--on' : 'dot'}
                 />
               ))}
-              {mine && isAdding(song) && <span className='dot dot--new' />}
+              {mine && !solo && isAdding(song) && (
+                <span className='dot dot--new' />
+              )}
             </div>
           )}
         </div>
-        {mine && song.notes.length > 0 && song.step === 0 && (
+        {mine && !gameTurn && song.notes.length > 0 && song.step === 0 && (
           <button
             className='tool'
             onClick={onReplay}
@@ -139,7 +150,7 @@ export function Side({
               <p className='result__icon' aria-hidden='true'>
                 🎵
               </p>
-              <h2>{t.songHad(result.length)}</h2>
+              <h2>{result.text}</h2>
               {result.newRecord && (
                 <p className='result__record'>{t.newRecord}</p>
               )}

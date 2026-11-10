@@ -47,6 +47,16 @@ export function SettingsView({
         <h2>{t.settings}</h2>
 
         <div className='field'>
+          <span>{t.players}</span>
+          <Segmented
+            options={[1, 2] as const}
+            value={settings.players}
+            label={String}
+            onChange={(players) => setSettings({ ...settings, players })}
+          />
+        </div>
+
+        <div className='field'>
           <span>{t.pads}</span>
           <Segmented
             options={PAD_COUNTS}
@@ -104,6 +114,12 @@ export function SettingsView({
               <tr key={n}>
                 <th>{t.longest(n)}</th>
                 <td>{stats.best[n] ?? 0}</td>
+              </tr>
+            ))}
+            {PAD_COUNTS.map((n) => (
+              <tr key={`solo-${n}`}>
+                <th>{t.longestSolo(n)}</th>
+                <td>{stats.solo[n] ?? 0}</td>
               </tr>
             ))}
           </tbody>

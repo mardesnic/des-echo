@@ -13,13 +13,14 @@ On your phone, open it and choose **Add to Home Screen** (Safari) or **Install a
 ## Features
 
 - Two players on one screen, each half turned to face its player
+- Or play alone: the game adds a note each turn, and you play the whole song back
 - 4 or 6 big buttons, each with its own colour, shape and note
 - Notes from a pentatonic scale, so every song sounds nice
 - Dots show how far into the song you are
 - Hear the song again before your turn
 - **Help**: the other player's buttons light up as notes are played, or sound only for a harder game
 - **Second chance**: one free wrong note per song, if you like
-- The longest song is kept as a record, with confetti when you beat it
+- The longest song is kept as a record (for two and for one player), with confetti when you beat it
 - Each new song starts with the other player
 - Picks up where you left off after a reload
 - Keeps the screen on while you play

@@ -37,14 +37,18 @@ const en = {
   replay: 'Hear the song again',
   songHad: (n: number) =>
     `Your song had ${count('en', n, { one: 'note', other: 'notes' })}!`,
+  playedBack: (n: number) =>
+    `You played back ${count('en', n, { one: 'note', other: 'notes' })}!`,
+  haveAnotherGo: 'Have another go!',
   newRecord: 'New record!',
   playAgain: 'Play again',
+  players: 'Players',
   pads: 'Buttons',
   lights: 'Help',
   lightsOn: 'Lights and sound',
   lightsOff: 'Sound only',
   lightsHint:
-    'With lights, the other side lights up too, and so does the song when you hear it again.',
+    'With lights, the buttons light up as the song plays, and on the other side too.',
   mistakes: 'Wrong note',
   strict: 'Ends the song',
   secondChance: 'Second chance',
@@ -53,6 +57,7 @@ const en = {
   statistics: 'Statistics',
   songsPlayed: 'Songs played',
   longest: (pads: number) => `Longest song, ${pads} buttons`,
+  longestSolo: (pads: number) => `Alone, ${pads} buttons`,
   source: 'Source',
 };
 
@@ -74,14 +79,18 @@ const hr: Strings = {
   replay: 'Poslušaj pjesmu ponovno',
   songHad: (n: number) =>
     `Vaša pjesma ima ${count('hr', n, { one: 'notu', few: 'note', other: 'nota' })}!`,
+  playedBack: (n: number) =>
+    `Ponovljeno: ${count('hr', n, { one: 'nota', few: 'note', other: 'nota' })}!`,
+  haveAnotherGo: 'Probaj opet!',
   newRecord: 'Novi rekord!',
   playAgain: 'Igraj ponovno',
+  players: 'Igrači',
   pads: 'Gumbi',
   lights: 'Pomoć',
   lightsOn: 'Svjetla i zvuk',
   lightsOff: 'Samo zvuk',
   lightsHint:
-    'Sa svjetlima zasvijetli i druga strana, a i pjesma kad je slušaš ponovno.',
+    'Sa svjetlima gumbi svijetle dok pjesma svira, i na drugoj strani.',
   mistakes: 'Kriva nota',
   strict: 'Završava pjesmu',
   secondChance: 'Druga prilika',
@@ -90,6 +99,7 @@ const hr: Strings = {
   statistics: 'Statistika',
   songsPlayed: 'Odsvirane pjesme',
   longest: (pads: number) => `Najduža pjesma, ${pads} gumba`,
+  longestSolo: (pads: number) => `Solo, ${pads} gumba`,
   source: 'Izvorni kod',
 };
 

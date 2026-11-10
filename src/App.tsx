@@ -5,11 +5,15 @@ import { Icon } from './components/Icon';
 import { SettingsView } from './components/Menu';
 import { Side, type Wobble } from './components/Side';
 import {
+  bestOf,
   initialStats,
+  isAdding,
   newSong,
   other,
   press,
   recordSong,
+  songLength,
+  withGameNote,
   type Player,
   type Song,
   type Stats,
@@ -26,7 +30,7 @@ const REPLAY_GAP = 550;
 const FINALE_GAP = 330;
 
 const fresh = (s: Settings, first: Player): Song =>
-  newSong(s.pads, first, s.secondChance ? 1 : 0);
+  newSong(s.players, s.pads, first, s.secondChance ? 1 : 0);
 
 export default function App() {
   const [settings, setSettings] = useStoredState<Settings>(
@@ -38,7 +42,9 @@ export default function App() {
   const [store, setStore] = useStoredState<{ song: Song }>('echo', {
     song: fresh(settings, 0),
   });
-  const { song } = store;
+  // Songs saved before playing alone was added are for two.
+  const song: Song = { ...store.song, players: store.song.players ?? 2 };
+  const solo = song.players === 1;
   const setSong = (s: Song) => setStore({ song: s });
   const [stats, setStats] = useStoredState<Stats>('echo-stats', initialStats);
   const [view, setView] = useState<'play' | 'settings'>('play');
@@ -102,6 +108,24 @@ export default function App() {
     later(s.notes.length * gap, done);
   };
 
+  // Playing alone, once the song has been played back (or at the start),
+  // the game adds a note and plays the whole song.
+  const waiting = solo && !song.over && !busy && isAdding(song);
+  useEffect(() => {
+    if (!waiting) return;
+    const id = window.setTimeout(() => {
+      const next = withGameNote(song);
+      setSong(next);
+      setBusy(true);
+      playSong(next, settings.lights ? [0] : [], REPLAY_GAP, () =>
+        setBusy(false)
+      );
+    }, 700);
+    return () => clearTimeout(id);
+    // Only when it starts waiting, not on every render while it waits.
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
+  }, [waiting, song.notes.length]);
+
   const start = (s: Song) => {
     stopAll();
     setSong(s);
@@ -118,7 +142,7 @@ export default function App() {
     if (outcome === 'ignored') return;
     setSong(next);
 
-    if (outcome === 'next' || outcome === 'added') {
+    if (outcome === 'next' || outcome === 'added' || outcome === 'done') {
       playNote(PADS[song.pads][pad].frequency);
       flash(settings.lights ? [player, other(player)] : [player], pad, 300);
       setRetrying(false);
@@ -170,7 +194,11 @@ export default function App() {
 
   const changeSettings = (s: Settings) => {
     setSettings(s);
-    if (s.pads !== settings.pads || s.secondChance !== settings.secondChance)
+    if (
+      s.players !== settings.players ||
+      s.pads !== settings.pads ||
+      s.secondChance !== settings.secondChance
+    )
       start(fresh(s, song.first));
   };
 
@@ -198,9 +226,19 @@ export default function App() {
       </main>
     );
 
+  const length = songLength(song);
   const result =
-    song.over && !busy ? { length: song.notes.length, newRecord } : null;
-  const best = stats.best[song.pads] ?? 0;
+    song.over && !busy
+      ? {
+          text: !length
+            ? t.haveAnotherGo
+            : solo
+              ? t.playedBack(length)
+              : t.songHad(length),
+          newRecord,
+        }
+      : null;
+  const best = bestOf(stats, song.players, song.pads);
 
   const side = (p: Player) => (
     <Side
@@ -219,8 +257,8 @@ export default function App() {
   );
 
   return (
-    <main className='duo'>
-      {side(1)}
+    <main className={solo ? 'duo duo--solo' : 'duo'}>
+      {!solo && side(1)}
 
       <div className='middle'>
         <button
