@@ -67,31 +67,6 @@ export function SettingsView({
         </div>
 
         <div className='field'>
-          <span>
-            {t.lights}
-            <span className='muted'>{t.lightsHint}</span>
-          </span>
-          <Segmented
-            options={[true, false]}
-            value={settings.lights}
-            label={(on) => (on ? t.lightsOn : t.lightsOff)}
-            onChange={(lights) => setSettings({ ...settings, lights })}
-          />
-        </div>
-
-        <div className='field'>
-          <span>{t.mistakes}</span>
-          <Segmented
-            options={[false, true]}
-            value={settings.secondChance}
-            label={(on) => (on ? t.secondChance : t.strict)}
-            onChange={(secondChance) =>
-              setSettings({ ...settings, secondChance })
-            }
-          />
-        </div>
-
-        <div className='field'>
           <span>{t.language}</span>
           <Segmented
             options={languages}

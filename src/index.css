@@ -7,7 +7,6 @@
   --accent: #7c4dcc;
   --on-accent: #ffffff;
   --turn: #efe7fb;
-  --heart: #e5484d;
   --radius: 18px;
 
   color-scheme: light dark;
@@ -32,7 +31,6 @@
     --accent: #b794f6;
     --on-accent: #1e1236;
     --turn: #221b30;
-    --heart: #ff6369;
   }
 }
 
@@ -341,12 +339,6 @@ h2 {
 
 .record {
   color: var(--accent);
-}
-
-.heart {
-  color: var(--heart);
-  font-size: 1.3rem;
-  line-height: 1;
 }
 
 /* When the song ends, on both halves. */

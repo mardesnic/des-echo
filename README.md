@@ -18,8 +18,7 @@ On your phone, open it and choose **Add to Home Screen** (Safari) or **Install a
 - Notes from a pentatonic scale, so every song sounds nice
 - Dots show how far into the song you are
 - Hear the song again before your turn
-- **Help**: the other player's buttons light up as notes are played, or sound only for a harder game
-- **Second chance**: one free wrong note per song, if you like
+- The buttons light up as notes play, on the other player's side too
 - The longest song is kept as a record (for two and for one player), with confetti when you beat it
 - Each new song starts with the other player
 - Picks up where you left off after a reload

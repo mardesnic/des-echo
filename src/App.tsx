@@ -30,7 +30,7 @@ const REPLAY_GAP = 550;
 const FINALE_GAP = 330;
 
 const fresh = (s: Settings, first: Player): Song =>
-  newSong(s.players, s.pads, first, s.secondChance ? 1 : 0);
+  newSong(s.players, s.pads, first);
 
 export default function App() {
   const [settings, setSettings] = useStoredState<Settings>(
@@ -53,7 +53,6 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [lit, setLit] = useState<[number | null, number | null]>([null, null]);
   const [wobble, setWobble] = useState<Wobble | null>(null);
-  const [retrying, setRetrying] = useState(false);
   const [newRecord, setNewRecord] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
   useWakeLock();
@@ -117,9 +116,7 @@ export default function App() {
       const next = withGameNote(song);
       setSong(next);
       setBusy(true);
-      playSong(next, settings.lights ? [0] : [], REPLAY_GAP, () =>
-        setBusy(false)
-      );
+      playSong(next, [0], REPLAY_GAP, () => setBusy(false));
     }, 700);
     return () => clearTimeout(id);
     // Only when it starts waiting, not on every render while it waits.
@@ -132,7 +129,6 @@ export default function App() {
     setBusy(false);
     setLit([null, null]);
     setWobble(null);
-    setRetrying(false);
     setNewRecord(false);
   };
 
@@ -144,8 +140,8 @@ export default function App() {
 
     if (outcome === 'next' || outcome === 'added' || outcome === 'done') {
       playNote(PADS[song.pads][pad].frequency);
-      flash(settings.lights ? [player, other(player)] : [player], pad, 300);
-      setRetrying(false);
+      // The other side lights up too, so the other player can follow.
+      flash([player, other(player)], pad, 300);
       if (outcome === 'added') {
         // A short pause, so the new note is heard before the turn passes.
         setBusy(true);
@@ -157,16 +153,6 @@ export default function App() {
     bonk();
     setWobble({ player, pad, key: Date.now() });
     setBusy(true);
-
-    if (outcome === 'retry') {
-      setRetrying(true);
-      later(900, () =>
-        playSong(next, settings.lights ? [player] : [], REPLAY_GAP, () =>
-          setBusy(false)
-        )
-      );
-      return;
-    }
 
     // The song is over: play it all once more, then celebrate it.
     const recorded = recordSong(stats, next);
@@ -184,9 +170,7 @@ export default function App() {
   const onReplay = (player: Player) => {
     if (busy || player !== song.turn || song.step || !song.notes.length) return;
     setBusy(true);
-    playSong(song, settings.lights ? [player] : [], REPLAY_GAP, () =>
-      setBusy(false)
-    );
+    playSong(song, [player], REPLAY_GAP, () => setBusy(false));
   };
 
   // Each new song starts with the other player.
@@ -194,11 +178,7 @@ export default function App() {
 
   const changeSettings = (s: Settings) => {
     setSettings(s);
-    if (
-      s.players !== settings.players ||
-      s.pads !== settings.pads ||
-      s.secondChance !== settings.secondChance
-    )
+    if (s.players !== settings.players || s.pads !== settings.pads)
       start(fresh(s, song.first));
   };
 
@@ -247,7 +227,6 @@ export default function App() {
       lit={lit[p]}
       wobble={wobble}
       busy={busy}
-      retrying={retrying}
       result={result}
       onPress={(pad) => onPress(p, pad)}
       onReplay={() => onReplay(p)}
@@ -272,11 +251,6 @@ export default function App() {
           <span className='record' aria-label={`${t.record}: ${best}`}>
             ★ {best}
           </span>
-          {song.chances > 0 && (
-            <span className='heart' role='img' aria-label={t.chance}>
-              ♥
-            </span>
-          )}
         </div>
         <button
           className='tool'

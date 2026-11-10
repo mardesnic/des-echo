@@ -26,7 +26,6 @@ export function Side({
   lit,
   wobble,
   busy,
-  retrying,
   result,
   onPress,
   onReplay,
@@ -38,7 +37,6 @@ export function Side({
   lit: number | null;
   wobble: Wobble | null;
   busy: boolean;
-  retrying: boolean;
   result: { text: string; newRecord: boolean } | null;
   onPress: (pad: number) => void;
   onReplay: () => void;
@@ -48,7 +46,7 @@ export function Side({
   const solo = song.players === 1;
   const mine = song.turn === player && !song.over;
   // Alone, the game's turn is while it adds a note and plays the song.
-  const gameTurn = solo && (isAdding(song) || (busy && !retrying));
+  const gameTurn = solo && (isAdding(song) || busy);
   const active = mine && !busy && !gameTurn;
   const pads = PADS[song.pads];
 
@@ -56,15 +54,13 @@ export function Side({
     ? song.over
       ? ''
       : t.listen
-    : retrying && song.step === 0
-      ? t.tryAgain
-      : gameTurn
-        ? t.listen
-        : !song.notes.length
-          ? t.first
-          : isAdding(song)
-            ? t.add
-            : t.repeat;
+    : gameTurn
+      ? t.listen
+      : !song.notes.length
+        ? t.first
+        : isAdding(song)
+          ? t.add
+          : t.repeat;
 
   // Taps react on touch down, without the click delay; a click with no
   // pointer behind it is the keyboard.

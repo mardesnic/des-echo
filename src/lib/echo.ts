@@ -1,8 +1,7 @@
 // Two players take turns growing one song. On your turn you play the
 // song so far back, note by note, then add one new note of your own.
 // Playing alone, the game adds the new notes and you play the song back.
-// A wrong note ends the song, unless there is a second chance left:
-// then the song plays again and you start your turn over.
+// A wrong note ends the song.
 
 // Player 0 sits at the bottom of the screen, player 1 at the top.
 export type Player = 0 | 1;
@@ -21,23 +20,20 @@ export type Song = {
   turn: Player;
   // How many notes of the song the player on turn has played back.
   step: number;
-  // Second chances left in this song.
-  chances: number;
   over: boolean;
 };
 
 // What a press did: played the right note, played the last note of the
-// song back alone (the game adds the next one), added a new note, used up
-// a second chance, ended the song, or nothing (not a pad, or song over).
-export type Outcome = 'next' | 'done' | 'added' | 'retry' | 'end' | 'ignored';
+// song back alone (the game adds the next one), added a new note, ended
+// the song, or nothing (not a pad, or song over).
+export type Outcome = 'next' | 'done' | 'added' | 'end' | 'ignored';
 
 export const other = (p: Player): Player => (p === 0 ? 1 : 0);
 
 export const newSong = (
   players: PlayerCount,
   pads: PadCount,
-  first: Player,
-  chances: number
+  first: Player
 ): Song => ({
   players,
   pads,
@@ -45,7 +41,6 @@ export const newSong = (
   first: players === 1 ? 0 : first,
   turn: players === 1 ? 0 : first,
   step: 0,
-  chances,
   over: false,
 });
 
@@ -63,11 +58,6 @@ export function press(
       const done = song.players === 1 && step === song.notes.length;
       return { song: { ...song, step }, outcome: done ? 'done' : 'next' };
     }
-    if (song.chances > 0)
-      return {
-        song: { ...song, step: 0, chances: song.chances - 1 },
-        outcome: 'retry',
-      };
     return { song: { ...song, over: true }, outcome: 'end' };
   }
 
