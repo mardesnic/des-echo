@@ -22,6 +22,7 @@ import { STRINGS, detectLang } from './lib/i18n';
 import { PADS } from './lib/pads';
 import { initialSettings, type Settings } from './lib/settings';
 import { bonk, fanfare, playNote } from './lib/sound';
+import { popMenu, pushMenu, useBackButton } from './lib/use-back-button';
 import { useStoredState } from './lib/use-stored-state';
 import { useWakeLock } from './lib/use-wake-lock';
 
@@ -47,7 +48,14 @@ export default function App() {
   const solo = song.players === 1;
   const setSong = (s: Song) => setStore({ song: s });
   const [stats, setStats] = useStoredState<Stats>('echo-stats', initialStats);
-  const [view, setView] = useState<'play' | 'settings'>('play');
+  const [view, setViewState] = useState<'play' | 'settings'>('play');
+  // Settings opens over the game, so the phone's Back button closes it.
+  const setView = (next: 'play' | 'settings') => {
+    if (next === 'play') popMenu();
+    else pushMenu();
+    setViewState(next);
+  };
+  useBackButton(() => setViewState('play'));
 
   // While a song plays to the players, nobody can press.
   const [busy, setBusy] = useState(false);

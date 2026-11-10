@@ -60,9 +60,15 @@ export function bonk() {
   osc.stop(start + 0.35);
 }
 
-// A happy run up the scale, played when a song ends.
+// A happy run up the scale and a little buzz, played when a song ends.
+// Phones without vibration (iPhones) just play the notes.
 export function fanfare() {
   [261.63, 329.63, 392.0, 523.25, 659.25].forEach((f, i) =>
     tone(f, { at: i * 0.09, length: i === 4 ? 1.2 : 0.4, volume: 0.25 })
   );
+  try {
+    navigator.vibrate?.([40, 60, 40, 60, 120]);
+  } catch {
+    // No buzz; the song still ends.
+  }
 }
