@@ -210,10 +210,11 @@ export default function App() {
             <h1>{t.title}</h1>
           </div>
           <button
-            className='button button--small'
+            className='button button--small button--icon'
             onClick={() => setView('play')}
+            aria-label={t.close}
           >
-            {t.done}
+            <Icon name='close' />
           </button>
         </header>
         <SettingsView

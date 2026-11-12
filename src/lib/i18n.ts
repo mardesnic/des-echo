@@ -24,7 +24,7 @@ const count = (lang: Lang, n: number, forms: Forms) => {
 const en = {
   title: 'Echo',
   settings: 'Settings',
-  done: 'Done',
+  close: 'Close',
   newGame: 'New game',
   pad: (n: number) => `Note ${n}`,
   listen: 'Listen…',
@@ -59,7 +59,7 @@ export type Strings = typeof en;
 const hr: Strings = {
   title: 'Jeka',
   settings: 'Postavke',
-  done: 'Gotovo',
+  close: 'Zatvori',
   newGame: 'Nova igra',
   pad: (n: number) => `Nota ${n}`,
   listen: 'Slušaj…',
