@@ -134,7 +134,9 @@ export default function App() {
     solo && !song.over && !busy && isAdding(song) && song.notes.length > 0;
   useEffect(() => {
     if (!waiting) return;
-    const id = window.setTimeout(() => addNote(song), 700);
+    // A long pause, so the player's own last note isn't heard as the
+    // start of the game's song.
+    const id = window.setTimeout(() => addNote(song), 1300);
     return () => clearTimeout(id);
     // Only when it starts waiting, not on every render while it waits.
     // oxlint-disable-next-line react-hooks/exhaustive-deps
@@ -269,16 +271,11 @@ export default function App() {
           <h1>{t.title}</h1>
         </div>
         <div className='middle__actions'>
-          <button
-            className='tool'
-            onClick={playAgain}
-            disabled={!song.notes.length || song.over}
-            aria-label={t.newSong}
-          >
-            <Icon name='clear' />
+          <button className='button button--small' onClick={playAgain}>
+            {t.newGame}
           </button>
           <button
-            className='tool'
+            className='button button--small button--icon'
             onClick={() => setView('settings')}
             aria-label={t.settings}
           >

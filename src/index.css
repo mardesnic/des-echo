@@ -357,9 +357,15 @@ h2 {
   gap: 8px;
 }
 
-.middle .tool {
-  width: 48px;
-  padding: 9px 2px;
+.button--icon {
+  display: grid;
+  place-items: center;
+  padding: 6px 10px;
+}
+
+.button--icon .icon {
+  width: 20px;
+  height: 20px;
 }
 
 /* When the song ends, on both halves. */
