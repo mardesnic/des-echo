@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { HomeLink } from './components/HomeLink';
 import { Confetti } from './components/Confetti';
 import { Icon } from './components/Icon';
 import { SettingsView } from './components/Menu';
 import { Side, type Wobble } from './components/Side';
 import {
-  bestOf,
   initialStats,
   isAdding,
   newSong,
@@ -196,7 +196,10 @@ export default function App() {
     return (
       <main className='app'>
         <header className='header'>
-          <h1>{t.title}</h1>
+          <div className='header__title'>
+            <HomeLink label={t.allGames} />
+            <h1>{t.title}</h1>
+          </div>
           <button
             className='button button--small'
             onClick={() => setView('play')}
@@ -231,7 +234,6 @@ export default function App() {
           newRecord,
         }
       : null;
-  const best = bestOf(stats, song.players, song.pads);
 
   const side = (p: Player) => (
     <Side
@@ -253,26 +255,27 @@ export default function App() {
       {!solo && side(1)}
 
       <div className='middle'>
-        <button
-          className='tool'
-          onClick={() => setView('settings')}
-          aria-label={t.settings}
-        >
-          <Icon name='settings' />
-        </button>
-        <div className='middle__info'>
-          <span className='record' aria-label={`${t.record}: ${best}`}>
-            ★ {best}
-          </span>
+        <div className='header__title'>
+          <HomeLink label={t.allGames} />
+          <h1>{t.title}</h1>
         </div>
-        <button
-          className='tool'
-          onClick={playAgain}
-          disabled={!song.notes.length || song.over}
-          aria-label={t.newSong}
-        >
-          <Icon name='clear' />
-        </button>
+        <div className='middle__actions'>
+          <button
+            className='tool'
+            onClick={playAgain}
+            disabled={!song.notes.length || song.over}
+            aria-label={t.newSong}
+          >
+            <Icon name='clear' />
+          </button>
+          <button
+            className='tool'
+            onClick={() => setView('settings')}
+            aria-label={t.settings}
+          >
+            <Icon name='settings' />
+          </button>
+        </div>
       </div>
 
       {side(0)}
