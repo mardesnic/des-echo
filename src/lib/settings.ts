@@ -9,6 +9,6 @@ export type Settings = {
 
 export const initialSettings: Settings = {
   language: 'auto',
-  players: 2,
+  players: 1,
   pads: 4,
 };

@@ -1,8 +1,10 @@
 # Echo
 
-A free music memory game for two young kids that works offline. Put the phone or tablet flat on the table between you: each player gets half of the screen, facing them. One plays a note, the other plays it back and adds one of their own, and the song grows a note every turn. How long a song can you make together?
+A free music memory game for young kids that works offline. The game plays a song, you play it back, and the song grows a note every turn. How long a song can you remember?
 
-Made for ages 5 and up. There is no timer, and the players don't play against each other: the song is theirs together. A wrong note ends the song, which then plays once more from start to end, and the players can try to beat their longest song.
+Two kids can also play together: put the phone or tablet flat on the table between you, and each player gets half of the screen, facing them. One plays a note, the other plays it back and adds one of their own.
+
+Made for ages 5 and up. There is no timer, and two players don't play against each other: the song is theirs together. A wrong note ends the song, which then plays once more from start to end, and you can try to beat your longest song.
 
 ## Demo
 
@@ -12,8 +14,8 @@ On your phone, open it and choose **Add to Home Screen** (Safari) or **Install a
 
 ## Features
 
-- Two players on one screen, each half turned to face its player
-- Or play alone: the game adds a note each turn, and you play the whole song back
+- Play alone: the game adds a note each turn, and you play the whole song back
+- Or two players on one screen, each half turned to face its player
 - 4 or 6 big buttons, each with its own colour, shape and note
 - Notes from a pentatonic scale, so every song sounds nice
 - Dots show how far into the song you are

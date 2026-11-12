@@ -17,8 +17,7 @@ export default defineConfig({
         id: 'des-echo',
         name: 'Echo',
         short_name: 'Echo',
-        description:
-          'A two-player music memory game for kids that works offline',
+        description: 'A music memory game for kids that works offline',
         theme_color: '#7c4dcc',
         background_color: '#f4f5f7',
         display: 'standalone',
