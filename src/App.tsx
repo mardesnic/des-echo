@@ -23,7 +23,7 @@ import { PADS } from './lib/pads';
 import { initialSettings, type Settings } from './lib/settings';
 import { bonk, fanfare, playNote } from './lib/sound';
 import { popMenu, pushMenu, useBackButton } from './lib/use-back-button';
-import { useSettings } from './lib/use-settings';
+import { useLanguage } from './lib/use-language';
 import { useStoredState } from './lib/use-stored-state';
 import { useWakeLock } from './lib/use-wake-lock';
 
@@ -35,7 +35,7 @@ const fresh = (s: Settings, first: Player): Song =>
   newSong(s.players, s.pads, first);
 
 export default function App() {
-  const [settings, setSettings] = useSettings<Settings>(
+  const [settings, setSettings] = useStoredState<Settings>(
     'echo-settings',
     initialSettings
   );
@@ -66,7 +66,8 @@ export default function App() {
   const [celebrating, setCelebrating] = useState(false);
   useWakeLock();
 
-  const lang = settings.language === 'auto' ? detectLang() : settings.language;
+  const [language, setLanguage] = useLanguage();
+  const lang = language === 'auto' ? detectLang() : language;
   const t = STRINGS[lang];
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -204,6 +205,8 @@ export default function App() {
           </button>
         </header>
         <SettingsView
+          language={language}
+          setLanguage={setLanguage}
           settings={settings}
           setSettings={changeSettings}
           stats={stats}
