@@ -125,8 +125,8 @@ export default function App() {
     playSong(next, [0], REPLAY_GAP, () => setBusy(false));
   };
 
-  // A new song alone waits for Go, so the game never starts playing by
-  // itself (and the phone lets sound play after a tap).
+  // Every new song alone waits for Go, so the game never starts playing
+  // by itself (and the phone lets sound play after a tap).
   const ready = solo && !song.over && !busy && !song.notes.length;
 
   // Once the song has been played back, the game adds the next note.
@@ -190,13 +190,8 @@ export default function App() {
     playSong(song, [player], REPLAY_GAP, () => setBusy(false));
   };
 
-  // Each new song starts with the other player. Alone, Play again is
-  // already a tap, so the song starts straight away.
-  const playAgain = () => {
-    const next = fresh(settings, other(song.first));
-    start(next);
-    if (solo) addNote(next);
-  };
+  // Each new song starts with the other player. Alone, it waits for Go.
+  const playAgain = () => start(fresh(settings, other(song.first)));
 
   const changeSettings = (s: Settings) => {
     setSettings(s);
