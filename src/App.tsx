@@ -23,6 +23,7 @@ import { PADS } from './lib/pads';
 import { initialSettings, type Settings } from './lib/settings';
 import { bonk, fanfare, playNote } from './lib/sound';
 import { popMenu, pushMenu, useBackButton } from './lib/use-back-button';
+import { useSettings } from './lib/use-settings';
 import { useStoredState } from './lib/use-stored-state';
 import { useWakeLock } from './lib/use-wake-lock';
 
@@ -34,7 +35,7 @@ const fresh = (s: Settings, first: Player): Song =>
   newSong(s.players, s.pads, first);
 
 export default function App() {
-  const [settings, setSettings] = useStoredState<Settings>(
+  const [settings, setSettings] = useSettings<Settings>(
     'echo-settings',
     initialSettings
   );
