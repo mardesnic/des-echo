@@ -30,6 +30,8 @@ export function Side({
   onPress,
   onReplay,
   onPlayAgain,
+  ready,
+  onGo,
   t,
 }: {
   player: Player;
@@ -41,6 +43,9 @@ export function Side({
   onPress: (pad: number) => void;
   onReplay: () => void;
   onPlayAgain: () => void;
+  // Alone, a new song waits for Go.
+  ready: boolean;
+  onGo: () => void;
   t: Strings;
 }) {
   const solo = song.players === 1;
@@ -50,17 +55,19 @@ export function Side({
   const active = mine && !busy && !gameTurn;
   const pads = PADS[song.pads];
 
-  const prompt = !mine
-    ? song.over
-      ? ''
-      : t.listen
-    : gameTurn
-      ? t.listen
-      : !song.notes.length
-        ? t.first
-        : isAdding(song)
-          ? t.add
-          : t.repeat;
+  const prompt = ready
+    ? t.ready
+    : !mine
+      ? song.over
+        ? ''
+        : t.listen
+      : gameTurn
+        ? t.listen
+        : !song.notes.length
+          ? t.first
+          : isAdding(song)
+            ? t.add
+            : t.repeat;
 
   // Taps react on touch down, without the click delay; a click with no
   // pointer behind it is the keyboard.
@@ -139,6 +146,19 @@ export function Side({
             </button>
           ))}
         </div>
+
+        {ready && (
+          <div className='result'>
+            <div className='result__card'>
+              <p className='result__icon' aria-hidden='true'>
+                🎵
+              </p>
+              <button className='button' onClick={onGo}>
+                {t.go}
+              </button>
+            </div>
+          </div>
+        )}
 
         {result && (
           <div className='result'>

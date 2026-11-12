@@ -117,17 +117,24 @@ export default function App() {
     later(s.notes.length * gap, done);
   };
 
-  // Playing alone, once the song has been played back (or at the start),
-  // the game adds a note and plays the whole song.
-  const waiting = solo && !song.over && !busy && isAdding(song);
+  // Playing alone, the game adds a note and plays the whole song.
+  const addNote = (s: Song) => {
+    const next = withGameNote(s);
+    setSong(next);
+    setBusy(true);
+    playSong(next, [0], REPLAY_GAP, () => setBusy(false));
+  };
+
+  // A new song alone waits for Go, so the game never starts playing by
+  // itself (and the phone lets sound play after a tap).
+  const ready = solo && !song.over && !busy && !song.notes.length;
+
+  // Once the song has been played back, the game adds the next note.
+  const waiting =
+    solo && !song.over && !busy && isAdding(song) && song.notes.length > 0;
   useEffect(() => {
     if (!waiting) return;
-    const id = window.setTimeout(() => {
-      const next = withGameNote(song);
-      setSong(next);
-      setBusy(true);
-      playSong(next, [0], REPLAY_GAP, () => setBusy(false));
-    }, 700);
+    const id = window.setTimeout(() => addNote(song), 700);
     return () => clearTimeout(id);
     // Only when it starts waiting, not on every render while it waits.
     // oxlint-disable-next-line react-hooks/exhaustive-deps
@@ -183,8 +190,13 @@ export default function App() {
     playSong(song, [player], REPLAY_GAP, () => setBusy(false));
   };
 
-  // Each new song starts with the other player.
-  const playAgain = () => start(fresh(settings, other(song.first)));
+  // Each new song starts with the other player. Alone, Play again is
+  // already a tap, so the song starts straight away.
+  const playAgain = () => {
+    const next = fresh(settings, other(song.first));
+    start(next);
+    if (solo) addNote(next);
+  };
 
   const changeSettings = (s: Settings) => {
     setSettings(s);
@@ -246,6 +258,8 @@ export default function App() {
       onPress={(pad) => onPress(p, pad)}
       onReplay={() => onReplay(p)}
       onPlayAgain={playAgain}
+      ready={ready}
+      onGo={() => addNote(song)}
       t={t}
     />
   );

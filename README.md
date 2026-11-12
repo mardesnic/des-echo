@@ -14,7 +14,7 @@ On your phone, open it and choose **Add to Home Screen** (Safari) or **Install a
 
 ## Features
 
-- Play alone: the game adds a note each turn, and you play the whole song back
+- Play alone: press Go and the game plays the first note, then adds a note each turn, and you play the whole song back; it never starts playing by itself
 - Or two players on one screen, each half turned to face its player
 - 4 or 6 big buttons, each with its own colour, shape and note
 - Notes from a pentatonic scale, so every song sounds nice
