@@ -23,7 +23,7 @@ import { PADS } from './lib/pads';
 import { initialSettings, type Settings } from './lib/settings';
 import { bonk, fanfare, playNote } from './lib/sound';
 import { popMenu, pushMenu, useBackButton } from './lib/use-back-button';
-import { useLanguage } from './lib/use-language';
+import { useLanguage } from './lib/use-shared-settings';
 import { useStoredState } from './lib/use-stored-state';
 import { useWakeLock } from './lib/use-wake-lock';
 
