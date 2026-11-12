@@ -48,6 +48,7 @@ const en = {
   songsPlayed: 'Songs played',
   longest: (pads: number) => `Longest song, ${pads} buttons`,
   longestSolo: (pads: number) => `Alone, ${pads} buttons`,
+  allGames: 'All games',
   source: 'Source',
 };
 
@@ -80,6 +81,7 @@ const hr: Strings = {
   songsPlayed: 'Odsvirane pjesme',
   longest: (pads: number) => `Najduža pjesma, ${pads} gumba`,
   longestSolo: (pads: number) => `Solo, ${pads} gumba`,
+  allGames: 'Sve igre',
   source: 'Izvorni kod',
 };
 

@@ -213,6 +213,7 @@ export default function App() {
           t={t}
         />
         <footer className='footer'>
+          <a href='/des-kids-games/'>{t.allGames}</a>
           <a href='https://github.com/mardesnic/des-echo'>{t.source}</a>
         </footer>
       </main>
