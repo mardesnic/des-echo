@@ -51,6 +51,7 @@ const en = {
   longestSolo: (pads: number) => `Alone, ${pads} buttons`,
   allGames: 'All games',
   source: 'Source',
+  version: 'Version',
 };
 
 export type Strings = typeof en;
@@ -85,6 +86,7 @@ const hr: Strings = {
   longestSolo: (pads: number) => `Solo, ${pads} gumba`,
   allGames: 'Sve igre',
   source: 'Izvorni kod',
+  version: 'Verzija',
 };
 
 export const STRINGS: Record<Lang, Strings> = { en, hr };
