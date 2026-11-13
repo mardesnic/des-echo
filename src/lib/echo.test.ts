@@ -6,6 +6,7 @@ import {
   newSong,
   press,
   recordSong,
+  songLength,
   withGameNote,
   type Song,
 } from './echo';
@@ -60,25 +61,27 @@ describe('a song', () => {
 });
 
 describe('playing alone', () => {
-  it('has the game add every note', () => {
+  it('has the player add the first note and the game the rest', () => {
     let song = newSong(1, 4, 1);
     expect(song.turn).toBe(0);
-    expect(press(song, 2).outcome).toBe('ignored');
-    song = withGameNote(song, () => 0.6);
-    expect(song.notes).toEqual([2]);
-    const { song: next, outcome } = press(song, 2);
-    expect(outcome).toBe('done');
-    expect(isAdding(next)).toBe(true);
-    expect(press(next, 1).outcome).toBe('ignored');
+    const first = press(song, 2);
+    expect(first.outcome).toBe('added');
+    expect(first.song.notes).toEqual([2]);
+    expect(isAdding(first.song)).toBe(true);
+    expect(press(first.song, 1).outcome).toBe('ignored');
 
-    song = withGameNote(next, () => 0);
+    song = withGameNote(first.song, () => 0);
     expect(song.notes).toEqual([2, 0]);
     expect(song.step).toBe(0);
     expect(press(song, 2).outcome).toBe('next');
+    const { song: next, outcome } = press(play(song, [2]), 0);
+    expect(outcome).toBe('done');
+    expect(isAdding(next)).toBe(true);
+    expect(press(next, 1).outcome).toBe('ignored');
   });
 
   it('ends on a wrong note', () => {
-    const song = withGameNote(newSong(1, 4, 0), () => 0);
+    const song = withGameNote(play(newSong(1, 4, 0), [1]), () => 0);
     const { song: next, outcome } = press(song, 3);
     expect(outcome).toBe('end');
     expect(next.over).toBe(true);
@@ -117,5 +120,9 @@ describe('stats', () => {
     expect(newRecord).toBe(true);
     expect(stats.solo).toEqual({ 4: 0, 6: 2 });
     expect(stats.best).toEqual({ 4: 0, 6: 0 });
+
+    // Only the player's own first note and the game's second.
+    const short: Song = { ...song, notes: [1, 2] };
+    expect(songLength(short)).toBe(0);
   });
 });

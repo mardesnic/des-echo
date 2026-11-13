@@ -1,6 +1,7 @@
 // Two players take turns growing one song. On your turn you play the
 // song so far back, note by note, then add one new note of your own.
-// Playing alone, the game adds the new notes and you play the song back.
+// Playing alone, you play the first note, then the game adds the new
+// notes and you play the song back.
 // A wrong note ends the song.
 
 // Player 0 sits at the bottom of the screen, player 1 at the top.
@@ -61,8 +62,11 @@ export function press(
     return { song: { ...song, over: true }, outcome: 'end' };
   }
 
-  // Playing alone, only the game adds notes.
-  if (song.players === 1) return { song, outcome: 'ignored' };
+  // Playing alone, you add only the first note; the game adds the rest.
+  if (song.players === 1) {
+    if (song.notes.length) return { song, outcome: 'ignored' };
+    return { song: { ...song, notes: [pad], step: 1 }, outcome: 'added' };
+  }
 
   return {
     song: {
@@ -107,8 +111,14 @@ export const initialStats: Stats = {
 export const bestOf = (stats: Stats, players: PlayerCount, pads: PadCount) =>
   (players === 1 ? stats.solo : stats.best)[pads] ?? 0;
 
+// Alone, the first note was the player's and the last the game's, so a
+// song of two notes was never played back.
 export const songLength = (song: Song) =>
-  song.players === 1 ? Math.max(0, song.notes.length - 1) : song.notes.length;
+  song.players === 1
+    ? song.notes.length > 2
+      ? song.notes.length - 1
+      : 0
+    : song.notes.length;
 
 export function recordSong(
   stats: Stats,
