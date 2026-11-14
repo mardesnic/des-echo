@@ -193,7 +193,7 @@ h2 {
 
 .duo--solo {
   grid-template-rows: auto minmax(0, 1fr);
-  padding-top: max(8px, env(safe-area-inset-top));
+  padding-top: max(16px, env(safe-area-inset-top));
 }
 
 .side {
@@ -350,6 +350,11 @@ h2 {
   justify-content: space-between;
   gap: 12px;
   padding: 0 16px;
+}
+
+/* Alone, the title sits where it does in every other game. */
+.duo--solo .middle {
+  padding: 4px 16px 2px 20px;
 }
 
 .middle__actions {
